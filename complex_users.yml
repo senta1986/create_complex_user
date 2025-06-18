@@ -1,18 +1,16 @@
 ---
-- name: Create complex user
+- name: Create multiple users
   hosts: all 
-  vars_files: 
-    - user_list.yml 
-  tasks:
+  vars_files:
+    - user_list.yml
+  tasks: 
     - vars:
-        password: "{{ lookup ('password', ('password-') + item.name + 'length=6') }}"
-      name: Create users
-      loop: "{{ users }}"
+        password: "{{ lookup ('password', ('password-') + item.name +' length=6') }}"
+      name: create users
+      loop: "{{users}}"
       ansible.builtin.user:
-        name: "{{ item.name }}"
-        uid: "{{ item.id }}"
-        password: "{{ password | password_hash('sha256') }}"
-        comment: "{{ item.first | capitalize +' '+ item.middle | capitalize +' '+ item.last | capitalize }}"
-
-
+        name: "{{item.name}}"
+        uid: "{{item.id}}"
+        password: "{{password | password_hash('sha256')}}"
+        comment: "{{item.first | capitalize +' '+ item.middle | capitalize +' '+ item.last | capitalize}}"
 
